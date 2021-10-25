@@ -9,7 +9,7 @@ public class CharacterControl : MonoBehaviour
     private Animator anim;
     private SpriteRenderer sprite;
 
-
+    [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float jumpForce = 14f;
     private float dirHorizontal = 0f;
@@ -37,7 +37,7 @@ public class CharacterControl : MonoBehaviour
 
         player.velocity = new Vector2(dirHorizontal * moveSpeed, player.velocity.y);
 
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && IsGrounded)
         {
             player.velocity = new Vector2(player.velocity.x, jumpForce);
         }
@@ -80,4 +80,6 @@ public class CharacterControl : MonoBehaviour
         //Cast enum value (0/1/2/3 as mentioned when enum was initialized) as integer for unity animator 
         anim.SetInteger("state", (int)state);
     }
+
+    private bool IsGrounded => Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
 }
