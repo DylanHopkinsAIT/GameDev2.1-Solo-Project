@@ -2381,6 +2381,7 @@ MonoBehaviour:
     m_Bits: 64
   moveSpeed: 7.06
   jumpForce: 7
+  dashMultiplier: 0.02
 --- !u!95 &1441133027
 Animator:
   serializedVersion: 3
