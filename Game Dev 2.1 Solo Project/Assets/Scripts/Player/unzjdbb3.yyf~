@@ -13,71 +13,67 @@ public class CharacterControl : MonoBehaviour
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float jumpForce = 14f;
-    [SerializeField] private float dashMultiplier = 0.05f;
+    [SerializeField] private float dashMultiplier = 0.02f;
     private float dirHorizontal = 0f;
 
     /*Create an enum (a group of read - only constants) to define what type of movement is happening.
      *This is more efficient than using true or false booleans for fall/jump/run/idle every time and also a lot tidier.
      *In this instance Idle = 0 | Walk = 1 | Jump = 2 | Fall = 3  | Dash = 4
-     */
-    private enum movementState
-    {
-        idle,
-        walk,
-        jump,
-        fall,
-        dash
-    };
+    */
+    private enum movementState {idle, walk, jump, fall, dash};
 
     private bool dashOffCooldown = false;
-    private bool isDashing = false;
     private bool IsGrounded => Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
 
-    void Start() {
+
+    // Start is called before the first frame update
+    void Start()
+    {
         player = GetComponent<Rigidbody2D>();
         coll = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
     }
 
-    void Update() {
+    // Update is called once per frame
+    void Update()
+    {
         CharacterMovement();
         MovementState();
-        CharacterDash();
+        CharacterDash(); 
     }
 
     /* Character Dash Script
      * Test what direction character is moving and dash in that direction
      */
-    private void CharacterDash() {
+    private void CharacterDash() 
+    {
+
         Vector3 MoveDirection = new Vector3();
         bool canDash;
 
-        //Switch to test Horizontal Direction
-        switch (dirHorizontal)
+        //Moving Right (dirHorizontal is between 0.1 and 1)
+        if (dirHorizontal > 0f)
         {
-            case float n when n > 0f: //Moving Right
-                MoveDirection = Vector3.right;
-                break;
-            case float n when n < 0: //Moving Left
-                MoveDirection = Vector3.left;
-                break;
+            MoveDirection = Vector3.right;
         }
 
-        canDash = (Input.GetButton("Dash"));
+        //Moving Left (dirHorizontal is between -1 and -0.1)
+        else if (dirHorizontal < 0)
+        {
+            MoveDirection = Vector3.left;
+        }
+
+        canDash = (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.JoystickButton5) && dashOffCooldown);
+
         if (canDash)
         {
             transform.position += MoveDirection * dashMultiplier;
-            isDashing = true;
         }
-        else
-        {
-            isDashing = false;
-        }
-
+        dashOffCooldown = false;
     }
 
-    /* Character Movement Script 
+     /* Character Movement Script 
      * 
      * Rather than hard coding the input keys, use the inputs defined inside unity.
      * Go to Edit > Project Settings > Input Manager > Axes to see the different types available.
@@ -99,56 +95,36 @@ public class CharacterControl : MonoBehaviour
     }
 
     //Test how player is moving to determine what animation should play
-    private void MovementState() {
+    private void MovementState() 
+    {
         movementState state;
 
-        //Switch for Horizontal Movement
         switch (dirHorizontal)
         {
-            case float n when n > 0f: //When walking right
+            case > 0f :
                 state = movementState.walk;
                 sprite.flipX = false;
                 break;
-            case float n when n < 0: //When walking left
+            case < 0:
                 state = movementState.walk;
                 sprite.flipX = true;
                 break;
-            default: //When idling
+            default:
                 state = movementState.idle;
                 break;
         }
 
-        //Only if player is dashing (Prevents animation conflics/overrides with vertical animations)
-        if (isDashing)
+        //Jumping
+        if (player.velocity.y > .1f)
         {
-            //Switch for Dash Movement
-            switch (dirHorizontal)
-            {
-                case float n when n > 0f: //Dashing right
-                    state = movementState.dash;
-                    sprite.flipX = false;
-                    break;
-                case float n when n < 0: //Dashing left
-                    state = movementState.dash;
-                    sprite.flipX = true;
-                    break;
-            }
+            state = movementState.jump;
+        }
+        //Falling
+        else if (player.velocity.y < -0.01f)
+        {
+            state = movementState.fall;
         }
 
-        //Only if player is not dashing (Prevents animation conflics/overrides with dash animations)
-        else if (!(isDashing))
-        {
-            //Switch for any Vertical Movement
-            switch (player.velocity.y)
-            {
-                case float n when n > .1f: //When Jumping
-                    state = movementState.jump;
-                    break;
-                case float n when n < -0.0f: //When falling
-                    state = movementState.fall;
-                    break;
-            }
-        }
         //Cast enum value (0/1/2/3/4 as mentioned when enum was initialized) as integer for unity animator 
         anim.SetInteger("state", (int)state);
     }
