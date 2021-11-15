@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using XInputDotNetPure;
 
 public class CharacterControl : MonoBehaviour
 {
@@ -31,7 +30,6 @@ public class CharacterControl : MonoBehaviour
         dash
     };
 
-    private bool rumble;
     private bool dashOffCooldown = false;
     private bool isDashing = false;
     private bool IsGrounded => Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
@@ -72,13 +70,11 @@ public class CharacterControl : MonoBehaviour
         {
             transform.position += MoveDirection * dashMultiplier;
             isDashing = true;
-            rumble = true;
-            GamepadRumble(rumble);
+            GamepadRumble.Rumble(true);
         }
         else
         {
-            rumble = false;
-            GamepadRumble(rumble);
+            GamepadRumble.Rumble(false);
             isDashing = false;
         }
 
@@ -160,15 +156,7 @@ public class CharacterControl : MonoBehaviour
         anim.SetInteger("state", (int)state);
     }
 
-    private void GamepadRumble(bool rumble) {
-            if (rumble)
-            {
-                GamePad.SetVibration(PlayerIndex.One, 1f, 1f);
-            }
-            else
-            {
-                GamePad.SetVibration(PlayerIndex.One, 0f, 0f);
-            }
-        }
+
+    
 
     }
