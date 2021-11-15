@@ -13,7 +13,7 @@ public class CharacterControl : MonoBehaviour
     //Using [SerializeField] allows the values to be changed in unity GUI, but is better practice than just making the variable public.
     [SerializeField] private LayerMask jumpableGround;
     [SerializeField] private float moveSpeed = 7f;
-    [SerializeField] private float jumpForce = 14f;
+    [SerializeField] private float jumpForce = 13f;
     [SerializeField] private float dashMultiplier = 0.05f;
     private float dirHorizontal = 0f;
 
@@ -32,7 +32,10 @@ public class CharacterControl : MonoBehaviour
 
     private bool dashOffCooldown = false;
     private bool isDashing = false;
-    private bool IsGrounded => Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
+    private bool IsGrounded()
+    {
+        return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
+    }
 
     void Start() {
         player = GetComponent<Rigidbody2D>();
@@ -80,25 +83,61 @@ public class CharacterControl : MonoBehaviour
 
     }
 
-        /* Character Movement Script 
-         * 
-         * Rather than hard coding the input keys, use the inputs defined inside unity.
-         * Go to Edit > Project Settings > Input Manager > Axes to see the different types available.
-         * This can be better as it allows for multiple types of control (Keyboard, Joystick etc.) without hard coding for each.
-         * 
-         */
+/* Character Movement Script 
+    * 
+    * Rather than hard coding the input keys, use the inputs defined inside unity.
+    * Go to Edit > Project Settings > Input Manager > Axes to see the different types available.
+    * This can be better as it allows for multiple types of control (Keyboard, Joystick etc.) without hard coding for each.
+    * 
+    */
     private void CharacterMovement() {
-    //Set float dirHorizontal equal to the horizontal axis ranging between -1 and 1, allowing analog support.
-    dirHorizontal = Input.GetAxisRaw("Horizontal");
+        int jumpCount = 1;
+        bool canDoubleJump = false;
+        bool jumpKeyDown = false;
+
+        //Set float dirHorizontal equal to the horizontal axis ranging between -1 and 1, allowing analog support.
+        dirHorizontal = Input.GetAxisRaw("Horizontal");
 
         //Player Move Left(-1 to -0.1) / Right (0.1 to 1) by using horizontal as a multiplier, times the moveSpeed.
         player.velocity = new Vector2(dirHorizontal * moveSpeed, player.velocity.y);
 
-        //Player Jump from Input manager, rather than hard coding spacebar, check is player grounded to prevent multiple jumps.
+        /*Player Jump from Input manager, rather than hard coding spacebar, check is player grounded to prevent multiple jumps.
         if (Input.GetButtonDown("Jump") && IsGrounded)
         {
             player.velocity = new Vector2(player.velocity.x, jumpForce);
+        }*/
+
+        //New jump script to work with doublejump
+
+        jumpKeyDown = (Input.GetKeyDown(KeyCode.Space));
+
+        if(jumpKeyDown && IsGrounded())
+        {
+            if (jumpCount < 2)
+            {
+                player.velocity += new Vector2(0, jumpForce);
+                jumpCount--;
+                canDoubleJump = true;
+                Debug.Log("DoubleJumpUp:" +canDoubleJump);
+            }
+            else if (canDoubleJump)
+            {
+                player.velocity += new Vector2(0, jumpForce);
+                jumpCount = 2;
+                canDoubleJump = false;
+                Debug.Log(jumpCount + ": Jumps Remaning");
+            }
+
         }
+
+
+
+
+
+
+
+
+
     }
 
     //Test how player is moving to determine what animation should play
@@ -149,14 +188,14 @@ public class CharacterControl : MonoBehaviour
                     break;
                 case float n when n < -0.0f: //When falling
                     state = movementState.fall;
-                    break;
+                    break;        
             }
         }
         //Cast enum value (0/1/2/3/4 as mentioned when enum was initialized) as integer for unity animator 
         anim.SetInteger("state", (int)state);
     }
 
-
+   
     
 
     }
