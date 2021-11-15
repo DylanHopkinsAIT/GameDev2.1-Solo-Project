@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XInputDotNetPure;
 
 public class CharacterControl : MonoBehaviour
 {
+
     private Rigidbody2D player;
     private BoxCollider2D coll;
     private Animator anim;
@@ -29,6 +31,7 @@ public class CharacterControl : MonoBehaviour
         dash
     };
 
+    private bool rumble;
     private bool dashOffCooldown = false;
     private bool isDashing = false;
     private bool IsGrounded => Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
@@ -69,24 +72,28 @@ public class CharacterControl : MonoBehaviour
         {
             transform.position += MoveDirection * dashMultiplier;
             isDashing = true;
+            rumble = true;
+            GamepadRumble(rumble);
         }
         else
         {
+            rumble = false;
+            GamepadRumble(rumble);
             isDashing = false;
         }
 
     }
 
-    /* Character Movement Script 
-     * 
-     * Rather than hard coding the input keys, use the inputs defined inside unity.
-     * Go to Edit > Project Settings > Input Manager > Axes to see the different types available.
-     * This can be better as it allows for multiple types of control (Keyboard, Joystick etc.) without hard coding for each.
-     * 
-     */
+        /* Character Movement Script 
+         * 
+         * Rather than hard coding the input keys, use the inputs defined inside unity.
+         * Go to Edit > Project Settings > Input Manager > Axes to see the different types available.
+         * This can be better as it allows for multiple types of control (Keyboard, Joystick etc.) without hard coding for each.
+         * 
+         */
     private void CharacterMovement() {
-        //Set float dirHorizontal equal to the horizontal axis ranging between -1 and 1, allowing analog support.
-        dirHorizontal = Input.GetAxisRaw("Horizontal");
+    //Set float dirHorizontal equal to the horizontal axis ranging between -1 and 1, allowing analog support.
+    dirHorizontal = Input.GetAxisRaw("Horizontal");
 
         //Player Move Left(-1 to -0.1) / Right (0.1 to 1) by using horizontal as a multiplier, times the moveSpeed.
         player.velocity = new Vector2(dirHorizontal * moveSpeed, player.velocity.y);
@@ -153,4 +160,15 @@ public class CharacterControl : MonoBehaviour
         anim.SetInteger("state", (int)state);
     }
 
-}
+    private void GamepadRumble(bool rumble) {
+            if (rumble)
+            {
+                GamePad.SetVibration(PlayerIndex.One, 1f, 1f);
+            }
+            else
+            {
+                GamePad.SetVibration(PlayerIndex.One, 0f, 0f);
+            }
+        }
+
+    }
