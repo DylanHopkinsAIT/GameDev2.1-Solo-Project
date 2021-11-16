@@ -12,8 +12,8 @@ public class CharacterControl : MonoBehaviour
 
     //Using [SerializeField] allows the values to be changed in unity GUI, but is better practice than just making the variable public.
     [SerializeField] private LayerMask jumpableGround;
-    [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float jumpForce = 13f;
+    [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float dashMultiplier = 0.05f;
     private float dirHorizontal = 0f;
 
@@ -23,11 +23,11 @@ public class CharacterControl : MonoBehaviour
      */
     private enum movementState
     {
-        idle,
-        walk,
-        jump,
-        fall,
-        dash
+        idle, //0
+        walk, //1
+        jump, //2
+        fall, //3
+        dash  //4
     };
 
     private bool dashOffCooldown = false;
@@ -91,7 +91,6 @@ public class CharacterControl : MonoBehaviour
     * 
     */
     private void CharacterMovement() {
-        int jumpCount = 1;
         bool canDoubleJump = false;
         bool jumpKeyDown = false;
 
@@ -101,42 +100,25 @@ public class CharacterControl : MonoBehaviour
         //Player Move Left(-1 to -0.1) / Right (0.1 to 1) by using horizontal as a multiplier, times the moveSpeed.
         player.velocity = new Vector2(dirHorizontal * moveSpeed, player.velocity.y);
 
-        /*Player Jump from Input manager, rather than hard coding spacebar, check is player grounded to prevent multiple jumps.
-        if (Input.GetButtonDown("Jump") && IsGrounded)
+        //Double Jump Script
+        jumpKeyDown = (Input.GetButtonDown("Jump"));
+        if(jumpKeyDown)
         {
-            player.velocity = new Vector2(player.velocity.x, jumpForce);
-        }*/
-
-        //New jump script to work with doublejump
-
-        jumpKeyDown = (Input.GetKeyDown(KeyCode.Space));
-
-        if(jumpKeyDown && IsGrounded())
-        {
-            if (jumpCount < 2)
+            if (IsGrounded())
             {
                 player.velocity += new Vector2(0, jumpForce);
-                jumpCount--;
                 canDoubleJump = true;
-                Debug.Log("DoubleJumpUp:" +canDoubleJump);
+                Debug.Log("Double jump available: " +canDoubleJump);
             }
-            else if (canDoubleJump)
+
+            else if(canDoubleJump)
             {
                 player.velocity += new Vector2(0, jumpForce);
-                jumpCount = 2;
+                Debug.Log("Double jump available: " + canDoubleJump);
                 canDoubleJump = false;
-                Debug.Log(jumpCount + ": Jumps Remaning");
             }
 
         }
-
-
-
-
-
-
-
-
 
     }
 
@@ -183,7 +165,7 @@ public class CharacterControl : MonoBehaviour
             //Switch for any Vertical Movement
             switch (player.velocity.y)
             {
-                case float n when n > .1f: //When Jumping
+                case float n when n > .01f: //When Jumping
                     state = movementState.jump;
                     break;
                 case float n when n < -0.0f: //When falling
@@ -195,7 +177,4 @@ public class CharacterControl : MonoBehaviour
         anim.SetInteger("state", (int)state);
     }
 
-   
-    
-
-    }
+}
