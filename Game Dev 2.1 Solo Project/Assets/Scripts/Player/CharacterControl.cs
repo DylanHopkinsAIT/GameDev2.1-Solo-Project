@@ -17,6 +17,11 @@ public class CharacterControl : MonoBehaviour
     [SerializeField] private float dashMultiplier = 0.05f;
     private float dirHorizontal = 0f;
 
+    private bool canDoubleJump = false;
+    private bool jumpKeyDown = false;
+    private bool isDashing = false;
+    private bool IsGrounded() { return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround); }
+
     /*Create an enum (a group of read - only constants) to define what type of movement is happening.
      *This is more efficient than using true or false booleans for fall/jump/run/idle every time and also a lot tidier.
      *In this instance Idle = 0 | Walk = 1 | Jump = 2 | Fall = 3  | Dash = 4
@@ -30,12 +35,7 @@ public class CharacterControl : MonoBehaviour
         dash  //4
     };
 
-    private bool dashOffCooldown = false;
-    private bool isDashing = false;
-    private bool IsGrounded()
-    {
-        return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround);
-    }
+
 
     void Start() {
         player = GetComponent<Rigidbody2D>();
@@ -91,8 +91,7 @@ public class CharacterControl : MonoBehaviour
     * 
     */
     private void CharacterMovement() {
-        bool canDoubleJump = false;
-        bool jumpKeyDown = false;
+
 
         //Set float dirHorizontal equal to the horizontal axis ranging between -1 and 1, allowing analog support.
         dirHorizontal = Input.GetAxisRaw("Horizontal");
@@ -102,19 +101,23 @@ public class CharacterControl : MonoBehaviour
 
         //Double Jump Script
         jumpKeyDown = (Input.GetButtonDown("Jump"));
+
         if(jumpKeyDown)
         {
+            //If jump key is pressed & isGrounded, allow player to jump and make doublejump available
             if (IsGrounded())
             {
+                player.velocity = new Vector2(player.velocity.x, 0);
                 player.velocity += new Vector2(0, jumpForce);
                 canDoubleJump = true;
-                Debug.Log("Double jump available: " +canDoubleJump);
             }
 
+            /*If jump key is pressed & player is NOT grounded (aka in air), allow player to jump a second
+             * time and then make double jump unavailable until grounded again*/
             else if(canDoubleJump)
             {
+                player.velocity = new Vector2(player.velocity.x, 0);
                 player.velocity += new Vector2(0, jumpForce);
-                Debug.Log("Double jump available: " + canDoubleJump);
                 canDoubleJump = false;
             }
 
