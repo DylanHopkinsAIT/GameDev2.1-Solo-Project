@@ -18,7 +18,6 @@ public class CharacterControl : MonoBehaviour
     private float dirHorizontal = 0f;
 
     private bool canDoubleJump = false;
-    private bool jumpKeyDown = false;
     private bool isDashing = false;
     private bool IsGrounded() { return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround); }
 
@@ -34,8 +33,6 @@ public class CharacterControl : MonoBehaviour
         fall, //3
         dash  //4
     };
-
-
 
     void Start() {
         player = GetComponent<Rigidbody2D>();
@@ -91,10 +88,11 @@ public class CharacterControl : MonoBehaviour
     * 
     */
     private void CharacterMovement() {
+    bool jumpKeyDown = false;
 
 
-        //Set float dirHorizontal equal to the horizontal axis ranging between -1 and 1, allowing analog support.
-        dirHorizontal = Input.GetAxisRaw("Horizontal");
+    //Set float dirHorizontal equal to the horizontal axis ranging between -1 and 1, allowing analog support.
+    dirHorizontal = Input.GetAxisRaw("Horizontal");
 
         //Player Move Left(-1 to -0.1) / Right (0.1 to 1) by using horizontal as a multiplier, times the moveSpeed.
         player.velocity = new Vector2(dirHorizontal * moveSpeed, player.velocity.y);
