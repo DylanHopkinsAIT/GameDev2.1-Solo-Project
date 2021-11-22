@@ -4,27 +4,26 @@ using UnityEngine;
 
 public class CharacterControl : MonoBehaviour
 {
+    //Using [SerializeField] allows the values to be changed in unity GUI, but seems to be better practice than just making the variable public.
+    [SerializeField] private LayerMask jumpableGround;
+    [SerializeField] private float jumpForce;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float dashMultiplier;
+    [SerializeField] public Vector3 respawnPoint;
+    private LevelManager gameLevelManager;
+    private float dirHorizontal = 0f;
+    private bool canDoubleJump = false;
+    private bool isDashing = false;
 
     private Rigidbody2D player;
     private BoxCollider2D coll;
     private Animator anim;
     private SpriteRenderer sprite;
 
-    //Using [SerializeField] allows the values to be changed in unity GUI, but is better practice than just making the variable public.
-    [SerializeField] private LayerMask jumpableGround;
-    [SerializeField] private float jumpForce = 13f;
-    [SerializeField] private float moveSpeed = 7f;
-    [SerializeField] private float dashMultiplier = 0.05f;
-    private float dirHorizontal = 0f;
-
-    private bool canDoubleJump = false;
-    private bool isDashing = false;
-    private bool IsGrounded() { return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround); }
-
-    /*Create an enum (a group of read - only constants) to define what type of movement is happening.
-     *This is more efficient than using true or false booleans for fall/jump/run/idle every time and also a lot tidier.
-     *In this instance Idle = 0 | Walk = 1 | Jump = 2 | Fall = 3  | Dash = 4
-     */
+    /// <summary>
+    /// I created an enum (a group of read - only constants) to define what type of movement is happening.<br/>
+    /// This is cleaner and probably more efficient than using lots of booleans
+    /// </summary>
     private enum movementState
     {
         idle, //0
@@ -39,6 +38,8 @@ public class CharacterControl : MonoBehaviour
         coll = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
+        respawnPoint = transform.position;
+        gameLevelManager = FindObjectOfType<LevelManager>();
     }
 
     void Update() {
@@ -47,9 +48,10 @@ public class CharacterControl : MonoBehaviour
         CharacterDash();
     }
 
-    /* Character Dash Script
-     * Test what direction character is moving and dash in that direction
-     */
+    /// <summary>
+    /// Character Dash Script<br/>
+    /// Tests what direction character is moving and dashes in that direction<br/>
+    /// </summary>
     private void CharacterDash() {
         Vector3 MoveDirection = new Vector3();
         bool canDash;
@@ -80,25 +82,23 @@ public class CharacterControl : MonoBehaviour
 
     }
 
-/* Character Movement Script 
-    * 
-    * Rather than hard coding the input keys, use the inputs defined inside unity.
-    * Go to Edit > Project Settings > Input Manager > Axes to see the different types available.
-    * This can be better as it allows for multiple types of control (Keyboard, Joystick etc.) without hard coding for each.
-    * 
-    */
+    /// <summary>
+    /// Character Movement Script<br/>
+    /// Rather than hard coding the input keys, i'm using the inputs defined inside unity.<br/>
+    /// Go to Edit > Project Settings > Input Manager > Axes to see the different types available<br/>
+    /// This can be better as it allows for multiple types of control (Keyboard, Joystick etc.) without hard coding for each.
+    /// </summary>
     private void CharacterMovement() {
     bool jumpKeyDown = false;
-
 
     //Set float dirHorizontal equal to the horizontal axis ranging between -1 and 1, allowing analog support.
     dirHorizontal = Input.GetAxisRaw("Horizontal");
 
-        //Player Move Left(-1 to -0.1) / Right (0.1 to 1) by using horizontal as a multiplier, times the moveSpeed.
-        player.velocity = new Vector2(dirHorizontal * moveSpeed, player.velocity.y);
+    //Player Move Left(-1 to -0.1) / Right (0.1 to 1) by using horizontal as a multiplier, times the moveSpeed.
+    player.velocity = new Vector2(dirHorizontal * moveSpeed, player.velocity.y);
 
-        //Double Jump Script
-        jumpKeyDown = (Input.GetButtonDown("Jump"));
+    //Double Jump Script
+    jumpKeyDown = (Input.GetButtonDown("Jump"));
 
         if(jumpKeyDown)
         {
@@ -111,7 +111,7 @@ public class CharacterControl : MonoBehaviour
             }
 
             /*If jump key is pressed & player is NOT grounded (aka in air), allow player to jump a second
-             * time and then make double jump unavailable until grounded again*/
+                * time and then make double jump unavailable until grounded again*/
             else if(canDoubleJump)
             {
                 player.velocity = new Vector2(player.velocity.x, 0);
@@ -123,7 +123,10 @@ public class CharacterControl : MonoBehaviour
 
     }
 
-    //Test how player is moving to determine what animation should play
+    /// <summary>
+    /// Tests how player is moving to determine what animation should play<br/>
+    /// Animation to play is defined in the movementState enumerator
+    /// </summary>
     private void MovementState() {
         movementState state;
 
@@ -178,4 +181,31 @@ public class CharacterControl : MonoBehaviour
         anim.SetInteger("state", (int)state);
     }
 
+    /// <summary>
+    /// If player collides with fall collider this method handles what happens
+    /// </summary>
+    /// <param name="other">Fall Collider</param>
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag == "FallDetector")
+        {
+            gameLevelManager.Respawn();
+        }
+        if(other.tag == "Checkpoint")
+        {
+            respawnPoint = other.transform.position;
+        }
+    }
+
+    /// <summary>
+    /// Checks if player is colliding with ground
+    /// </summary>
+    /// <returns>True if grounded</returns>
+    private bool IsGrounded() 
+    { 
+        return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround); 
+    }
 }
+
+
+
