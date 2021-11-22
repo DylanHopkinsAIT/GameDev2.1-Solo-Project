@@ -189,10 +189,12 @@ public class CharacterControl : MonoBehaviour
     {
         if(other.tag == "FallDetector")
         {
+            //Calls respawn method if character falls out of map
             gameLevelManager.Respawn();
         }
         if(other.tag == "Checkpoint")
         {
+            //Updates respawn location to most recent checkpoint
             respawnPoint = other.transform.position;
         }
     }
@@ -201,7 +203,7 @@ public class CharacterControl : MonoBehaviour
     /// Checks if player is colliding with ground
     /// </summary>
     /// <returns>True if grounded</returns>
-    private bool IsGrounded() 
+    public bool IsGrounded() 
     { 
         return Physics2D.BoxCast(coll.bounds.center, coll.bounds.size, 0f, Vector2.down, .1f, jumpableGround); 
     }

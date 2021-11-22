@@ -11,6 +11,7 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Allows access to variables inside CharacterControl script
         gamePlayer = FindObjectOfType<CharacterControl>();
     }
 
@@ -20,11 +21,17 @@ public class LevelManager : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Respawn function calls on respawn Coroutine
+    /// </summary>
     public void Respawn()
     {
         StartCoroutine("RespawnCoroutine");
     }
 
+    /// <summary>
+    /// Respwans enemy at most recent checkpoint on a specified time delay
+    /// </summary>
     private IEnumerator RespawnCoroutine()
     {
         gamePlayer.gameObject.SetActive(false);

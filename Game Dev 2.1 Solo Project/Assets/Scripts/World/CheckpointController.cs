@@ -18,6 +18,10 @@ public class CheckpointController : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// If player touches checkpoint object, checkpoint is reached
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player")

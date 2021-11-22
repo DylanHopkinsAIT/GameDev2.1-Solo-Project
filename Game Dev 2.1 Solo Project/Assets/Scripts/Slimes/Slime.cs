@@ -16,6 +16,11 @@ public class Slime : MonoBehaviour
         patrol();
     }
 
+    /// <summary>
+    /// Causes the slime to take damage<br/>
+    /// This damage is deducted from its health.
+    /// </summary>
+    /// <param name="damage">Specified amount of damage</param>
     public void TakeDamage(int damage)
     {
         health -= damage;
@@ -26,23 +31,37 @@ public class Slime : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Causes the slime to die, destroys its instance
+    /// </summary>
     private void Die()
     {
         Destroy(gameObject);
     }
 
+    /// <summary>
+    /// This method controls the slimes patrolling in game<br/>
+    /// Slimes will always travel towards the edge of its platform<br/>
+    /// and if it reaches the end it turns around and moves in the <br/>
+    /// opposite direction
+    /// </summary>
     private void patrol()
     {
         transform.Translate(Vector2.right * speed * Time.deltaTime);
 
+        //Using a raycast from ground detector object which is offset forwards from slime to determine if slime is about to fall off
         RaycastHit2D groundinfo = Physics2D.Raycast(groundDetection.position, Vector2.down, distance);
+
+        //If no ground
         if (groundinfo.collider == false)
         {
+            //Turn left
             if (movingRight)
             {
                 transform.eulerAngles = new Vector3(0f, -180f, 0f);
                 movingRight = false;
             }
+            //Turn right
             else
             {
                 transform.eulerAngles = new Vector3(0f, 0f, 0f);

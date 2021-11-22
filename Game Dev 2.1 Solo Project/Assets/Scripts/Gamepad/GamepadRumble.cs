@@ -6,8 +6,9 @@ using XInputDotNetPure; //For controller rumble
 
 public class GamepadRumble : MonoBehaviour
 {
-    
-    //This method causes gamepad to vibrate, will not stop until receives a false boolean
+    /// <summary>
+    /// This method causes gamepad to vibrate, will not stop until receives a false boolean
+    /// </summary>
     public static void Rumble(bool rumble) {
         if (rumble)
         {

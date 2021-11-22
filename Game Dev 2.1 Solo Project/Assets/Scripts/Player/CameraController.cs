@@ -14,6 +14,12 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
     }
+
+    /// <summary>
+    /// Basic camera control functions, camera follows the player and <br/>
+    /// shifts either left or right to give the player a better view <br/>
+    /// forward on a specified offset. Uses Lerp to smoothly move.
+    /// </summary>
     private void Update() 
     {
         dirHorizontal = Input.GetAxisRaw("Horizontal");
