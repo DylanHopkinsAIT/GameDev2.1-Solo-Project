@@ -316,9 +316,9 @@ TextureImporter:
       name: Mossy - TileSet_3
       rect:
         serializedVersion: 2
-        x: 1536
+        x: 1562
         y: 3072
-        width: 512
+        width: 466
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -475,9 +475,9 @@ TextureImporter:
       name: Mossy - TileSet_10
       rect:
         serializedVersion: 2
-        x: 1536
+        x: 1538
         y: 2560
-        width: 512
+        width: 486
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -640,7 +640,7 @@ TextureImporter:
         serializedVersion: 2
         x: 1536
         y: 2048
-        width: 512
+        width: 485
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}

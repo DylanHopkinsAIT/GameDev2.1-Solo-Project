@@ -22,21 +22,15 @@ public class PlayerAttack : MonoBehaviour
     {
         dirHorizontal = Input.GetAxisRaw("Horizontal");
 
-
-
-
         if
             (Input.GetButtonDown("Fire1"))
+
         {
             Shoot();
-            if (dirHorizontal > 0f)
-            {
-
-            }
-            if (dirHorizontal < 0f)
-            {
-
-            }
+            GamepadRumble.Rumble(true);
+        }
+        else{
+            GamepadRumble.Rumble(false);
         }
     }
 
