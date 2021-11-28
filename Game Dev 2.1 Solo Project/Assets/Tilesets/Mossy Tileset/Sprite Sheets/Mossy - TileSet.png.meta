@@ -343,7 +343,7 @@ TextureImporter:
         serializedVersion: 2
         x: 2048
         y: 3072
-        width: 512
+        width: 511
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -362,9 +362,9 @@ TextureImporter:
       name: Mossy - TileSet_5
       rect:
         serializedVersion: 2
-        x: 2560
+        x: 2561
         y: 3072
-        width: 512
+        width: 510
         height: 512
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -404,7 +404,7 @@ TextureImporter:
       name: Mossy - TileSet_7
       rect:
         serializedVersion: 2
-        x: 0
+        x: 7
         y: 2560
         width: 512
         height: 512
@@ -500,10 +500,10 @@ TextureImporter:
       name: Mossy - TileSet_11
       rect:
         serializedVersion: 2
-        x: 2048
+        x: 2050
         y: 2560
-        width: 512
-        height: 512
+        width: 510
+        height: 511
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -521,10 +521,10 @@ TextureImporter:
       name: Mossy - TileSet_12
       rect:
         serializedVersion: 2
-        x: 2560
-        y: 2560
-        width: 512
-        height: 512
+        x: 2561
+        y: 2561
+        width: 509
+        height: 510
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -545,7 +545,7 @@ TextureImporter:
         x: 3072
         y: 2560
         width: 512
-        height: 512
+        height: 511
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -665,8 +665,8 @@ TextureImporter:
         serializedVersion: 2
         x: 2048
         y: 2048
-        width: 512
-        height: 512
+        width: 511
+        height: 511
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -684,10 +684,10 @@ TextureImporter:
       name: Mossy - TileSet_19
       rect:
         serializedVersion: 2
-        x: 2560
+        x: 2561
         y: 2048
-        width: 512
-        height: 512
+        width: 510
+        height: 511
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -705,10 +705,10 @@ TextureImporter:
       name: Mossy - TileSet_20
       rect:
         serializedVersion: 2
-        x: 3072
+        x: 3073
         y: 2048
-        width: 512
-        height: 512
+        width: 511
+        height: 511
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -836,8 +836,8 @@ TextureImporter:
         serializedVersion: 2
         x: 2048
         y: 1536
-        width: 512
-        height: 512
+        width: 511
+        height: 511
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -855,10 +855,10 @@ TextureImporter:
       name: Mossy - TileSet_26
       rect:
         serializedVersion: 2
-        x: 2560
+        x: 2561
         y: 1536
-        width: 512
-        height: 512
+        width: 510
+        height: 511
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -876,10 +876,10 @@ TextureImporter:
       name: Mossy - TileSet_27
       rect:
         serializedVersion: 2
-        x: 3072
+        x: 3073
         y: 1536
-        width: 512
-        height: 512
+        width: 511
+        height: 511
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

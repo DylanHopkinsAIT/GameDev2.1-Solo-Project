@@ -14,20 +14,9 @@ public class Slime : MonoBehaviour
     void Update()
     {
         patrol();
-    }
-
-    /// <summary>
-    /// Causes the slime to take damage<br/>
-    /// This damage is deducted from its health.
-    /// </summary>
-    /// <param name="damage">Specified amount of damage</param>
-    public void TakeDamage(int damage)
-    {
-        health -= damage;
-
-        if(health <= 0)
+        if(transform.position.y <= -7)
         {
-            Die();
+            Destroy(this.gameObject);
         }
     }
 
@@ -69,6 +58,5 @@ public class Slime : MonoBehaviour
             }
         }
     }
-
 
 }

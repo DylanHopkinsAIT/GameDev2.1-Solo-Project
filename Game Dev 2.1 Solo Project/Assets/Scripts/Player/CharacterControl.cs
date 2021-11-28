@@ -45,8 +45,13 @@ public class CharacterControl : MonoBehaviour
     void Update() {
         CharacterMovement();
         MovementState();
+    }
+
+    private void LateUpdate()
+    {
         CharacterDash();
     }
+
 
     /// <summary>
     /// Character Dash Script<br/>
@@ -187,10 +192,12 @@ public class CharacterControl : MonoBehaviour
     /// <param name="other">Fall Collider</param>
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "FallDetector")
+        if(other.tag == "FallDetector" || other.tag =="Trap" || other.tag == "Collision")
         {
             //Calls respawn method if character falls out of map
             gameLevelManager.Respawn();
+            ScoreScript.scoreValue -= 50;
+
         }
         if(other.tag == "Checkpoint")
         {
