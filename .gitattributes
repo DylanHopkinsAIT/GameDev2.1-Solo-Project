@@ -1,1 +1,5 @@
-
+*.html linguist-detectable=false
+*.htm linguist-detectable=false
+*.meta linguist-detectable=false
+*.json linguist-detectable=false
+*.shader linguist-detectable=false
