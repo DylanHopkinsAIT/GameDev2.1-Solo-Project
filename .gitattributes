@@ -3,3 +3,4 @@
 *.meta linguist-detectable=false
 *.json linguist-detectable=false
 *.shader linguist-detectable=false
+*.cginc linguist-detectable=false
