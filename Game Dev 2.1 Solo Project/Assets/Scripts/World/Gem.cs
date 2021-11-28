@@ -5,6 +5,13 @@ using UnityEngine;
 public class Gem : MonoBehaviour
 {
 
+    private AudioSource gemPickup;
+
+    private void Start()
+    {
+        gemPickup = GetComponent<AudioSource>();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -17,6 +24,7 @@ public class Gem : MonoBehaviour
         {
             ScoreScript.scoreValue += 10;
             Destroy(this.gameObject);
+            gemPickup.Play();
         }
         
     }

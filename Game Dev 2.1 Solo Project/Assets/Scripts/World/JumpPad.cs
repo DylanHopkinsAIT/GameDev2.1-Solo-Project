@@ -7,22 +7,27 @@ public class JumpPad : MonoBehaviour
     private Animator anim; 
     [SerializeField] private float speed;
 
-
     private void Start()
     {
         anim = GetComponent<Animator>();
     }
 
+    /// <summary>
+    /// When player collides with plant, make player jump very high
+    /// </summary>
+    /// <param name="other"></param>
     private void OnCollisionEnter2D(Collision2D other)
     {
+        Rigidbody2D player = other.gameObject.GetComponent<Rigidbody2D>();
 
         if (other.gameObject.CompareTag("Player"))
         {
-            //Your pad must have a rigidbody as well as your player(I think I'm not sure I got
-            other.gameObject.GetComponent<Rigidbody2D>
-                    ().AddForce(Vector3.up * speed);
-
+            player.velocity = new Vector2(player.velocity.x, 0);
+            player.AddForce(Vector3.up * speed);
             anim.Play("PlantJump");
         }
+
+
     }
+
 }

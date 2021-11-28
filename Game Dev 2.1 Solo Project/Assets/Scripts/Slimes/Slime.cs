@@ -9,12 +9,17 @@ public class Slime : MonoBehaviour
     [SerializeField] private Transform groundDetection;
     [SerializeField] private int health = 100;
     private bool movingRight = true;
+    private AudioSource slimeDie;
 
+    private void Start()
+    {
+        slimeDie = GetComponent<AudioSource>();
+    }
 
     void Update()
     {
         patrol();
-        if(transform.position.y <= -7)
+        if (transform.position.y <= -7)
         {
             Destroy(this.gameObject);
         }
@@ -26,6 +31,7 @@ public class Slime : MonoBehaviour
     private void Die()
     {
         Destroy(gameObject);
+        slimeDie.Play();
     }
 
     /// <summary>

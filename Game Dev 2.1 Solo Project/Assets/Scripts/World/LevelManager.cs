@@ -7,7 +7,6 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private float respawnDelay;
     private CharacterControl gamePlayer;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -18,7 +17,7 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     /// <summary>
@@ -35,7 +34,8 @@ public class LevelManager : MonoBehaviour
     private IEnumerator RespawnCoroutine()
     {
         gamePlayer.gameObject.SetActive(false);
-        yield return new WaitForSeconds(respawnDelay);
+        yield
+        return new WaitForSeconds(respawnDelay);
         gamePlayer.transform.position = gamePlayer.respawnPoint;
         gamePlayer.gameObject.SetActive(true);
     }

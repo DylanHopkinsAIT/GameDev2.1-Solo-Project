@@ -15,6 +15,7 @@ public class CharacterControl : MonoBehaviour
     private bool canDoubleJump = false;
     private bool isDashing = false;
 
+    private AudioSource jumpSound;
     private Rigidbody2D player;
     private BoxCollider2D coll;
     private Animator anim;
@@ -40,18 +41,21 @@ public class CharacterControl : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         respawnPoint = transform.position;
         gameLevelManager = FindObjectOfType<LevelManager>();
+        jumpSound = GetComponent<AudioSource>();
     }
 
     void Update() {
         CharacterMovement();
         MovementState();
-    }
-
-    private void LateUpdate()
-    {
         CharacterDash();
-    }
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+            Debug.Log("Quitting");
+        }
+
+    }
 
     /// <summary>
     /// Character Dash Script<br/>
@@ -113,6 +117,7 @@ public class CharacterControl : MonoBehaviour
                 player.velocity = new Vector2(player.velocity.x, 0);
                 player.velocity += new Vector2(0, jumpForce);
                 canDoubleJump = true;
+                jumpSound.Play();
             }
 
             /*If jump key is pressed & player is NOT grounded (aka in air), allow player to jump a second
@@ -122,6 +127,7 @@ public class CharacterControl : MonoBehaviour
                 player.velocity = new Vector2(player.velocity.x, 0);
                 player.velocity += new Vector2(0, jumpForce);
                 canDoubleJump = false;
+                jumpSound.Play();
             }
 
         }
